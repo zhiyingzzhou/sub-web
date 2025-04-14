@@ -507,22 +507,24 @@ export default {
 
       this.loading = true;
 
-      let data = new FormData();
-      data.append("longUrl", btoa(this.customSubUrl));
-
       this.$axios
-        .post(shortUrlBackend, data, {
-          header: {
-            "Content-Type": "application/form-data; charset=utf-8"
+        .get(shortUrlBackend, {
+          params: {
+            destination: this.customSubUrl,
+            title: "订阅链接"
+          },
+          headers: {
+            "Content-Type": "application/json",
+            'apikey': process.env.VUE_APP_MYURLS_API_KEY
           }
         })
         .then(res => {
-          if (res.data.Code === 1 && res.data.ShortUrl !== "") {
-            this.curtomShortSubUrl = res.data.ShortUrl;
-            this.$copyText(res.data.ShortUrl);
+          if (res.status === 200 && res.data && res.data.id && (res.data.shortURL || res.data.shortUrl)) {
+            this.curtomShortSubUrl = this.ensureHttpsProtocol(res.data.shortURL || res.data.shortUrl);
+            this.$copyText(this.curtomShortSubUrl);
             this.$message.success("短链接已复制到剪贴板");
           } else {
-            this.$message.error("短链接获取失败：" + res.data.Message);
+            this.$message.error("短链接获取失败：" + (res.data.message || '未知错误'));
           }
         })
         .catch(() => {
@@ -552,7 +554,7 @@ export default {
       }
 
       this.loading = true;
-
+      
       let body = {
         content: this.uploadConfig,
       }
@@ -751,6 +753,15 @@ export default {
         value: itemValue
       }
       localStorage.setItem(itemKey, JSON.stringify(data))
+    },
+    ensureHttpsProtocol(url) {
+      if (!url) return url;
+      if (url.startsWith('http://')) {
+        return 'https://' + url.substr(7);
+      } else if (!url.startsWith('https://')) {
+        return 'https://' + url;
+      }
+      return url;
     }
   },
 };
