@@ -8,7 +8,7 @@ require(`@/plugins/particles`)
 require(`@/plugins/axios`)
 require(`@/plugins/device`)
 
-import '@/icons' // icon
+import '@/icons'
 import './registerServiceWorker'
 
 Vue.config.productionTip = false
