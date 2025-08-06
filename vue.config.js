@@ -43,5 +43,5 @@ module.exports = {
       navigateFallback: '/',
       navigateFallbackDenylist: [/\/api\//]
     }
-  }
+  },
 };

@@ -56,7 +56,8 @@
                     <div slot="suffix" style="width: 10px;">:</div>
                   </el-input>
                   <el-input v-model="param.value" placeholder="自定义参数内容">
-                      <el-button slot="suffix" type="text" icon="el-icon-delete" style="margin-right: 5px" @click="customParams.splice(i, 1)"/>
+                    <el-button slot="suffix" type="text" icon="el-icon-delete" style="margin-right: 5px"
+                      @click="customParams.splice(i, 1)" />
                   </el-input>
                 </el-form-item>
 
@@ -180,7 +181,7 @@
       <div slot="title">
         解析 Subconverter 链接
       </div>
-      <el-form label-position="left" :inline="true" >
+      <el-form label-position="left" :inline="true">
         <el-form-item prop="uploadConfig" label="订阅链接：" label-width="85px">
           <el-input v-model="loadConfig" style="width: 565px"></el-input>
         </el-form-item>
@@ -227,7 +228,7 @@ export default {
           ssd: "ssd",
           sssub: "sssub",
           ssr: "ssr",
-          ClashR: "clashr",          
+          ClashR: "clashr",
           V2Ray: "v2ray",
           Trojan: "trojan",
           Surge3: "surge&ver=3",
@@ -408,7 +409,7 @@ export default {
       const url = "surge://install-config?url=";
       window.open(url + this.customSubUrl);
     },
-    addCustomParam(){
+    addCustomParam() {
       this.customParams.push({
         name: "",
         value: "",
@@ -499,14 +500,13 @@ export default {
       this.$copyText(this.customSubUrl);
       this.$message.success("定制订阅已复制到剪贴板");
     },
-    makeShortUrl() {
+    async makeShortUrl() {
       if (this.customSubUrl === "") {
         this.$message.warning("请先生成订阅链接，再获取对应短链接");
         return false;
       }
 
       this.loading = true;
-
       this.$axios
         .get(shortUrlBackend, {
           params: {
@@ -554,7 +554,7 @@ export default {
       }
 
       this.loading = true;
-      
+
       let body = {
         content: this.uploadConfig,
       }
